@@ -24,15 +24,14 @@ const SuggestedUsers = () => {
 				</Flex>
 			)}
 
+			{/* <SuggestedUser name='krishna bhatt' followers={1200} avatar='https://bit.ly/dan-abramov' /> */}
+			
 			{suggestedUsers.map((user) => (
 				<SuggestedUser user={user} key={user.id} />
 			))}
 
 			<Box fontSize={12} color={"gray.500"} mt={5} alignSelf={"start"}>
-				© 2023 Built By{" "}
-				<Link href='https://www.youtube.com/@asaprogrammer_' target='_blank' color='blue.500' fontSize={14}>
-					As a Programmer
-				</Link>
+				© 2024 Built By Team Zorzo 
 			</Box>
 		</VStack>
 	);
