@@ -22,18 +22,30 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
 
 	return (
 		<Box mb={10} marginTop={"auto"}>
-			<Flex alignItems={"center"} gap={4} w={"full"} pt={0} mb={2} mt={4}>
-				<Box onClick={handleLikePost} cursor={"pointer"} fontSize={18}>
-					{!isLiked ? <NotificationsLogo /> : <UnlikeLogo />}
-				</Box>
+			<Flex alignItems={"center"} justifyContent="space-between" w={"full"} pt={0} mb={2} mt={4}>
+				{/* Like and Comment Icons on the left */}
+				<Flex alignItems={"center"} gap={3}>
+					<Box onClick={handleLikePost} cursor={"pointer"} fontSize={18}>
+						{!isLiked ? <NotificationsLogo /> : <UnlikeLogo />}
+					</Box>
+					<Text fontWeight={600} fontSize={"sm"}>
+						{likes} likes
+					</Text>
+				</Flex>
 
-				<Box cursor={"pointer"} fontSize={18} onClick={() => commentRef.current.focus()}>
-					<CommentLogo />
-				</Box>
+				{/* Buy Now Button on the right */}
+				<Button
+					id="buynow"
+					bg="blue.500"
+					color="white"
+					borderRadius="2xl"
+					size="sm"
+					_hover={{ bg: "blue.800" }}
+				>
+					Buy Now
+				</Button>
 			</Flex>
-			<Text fontWeight={600} fontSize={"sm"}>
-				{likes} likes
-			</Text>
+
 
 			{isProfilePage && (
 				<Text fontSize='12' color={"gray"}>
@@ -59,8 +71,12 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
 				</>
 			)}
 
+			{/* Comment Post Section */}
 			{authUser && (
-				<Flex alignItems={"center"} gap={2} justifyContent={"space-between"} w={"full"}>
+				<Flex alignItems={"center"} gap={3} justifyContent={"space-between"} w={"full"} mt={2}>					
+					<Box cursor={"pointer"} fontSize={18} onClick={() => commentRef.current.focus()}>
+						<CommentLogo />
+					</Box>
 					<InputGroup>
 						<Input
 							variant={"flushed"}
