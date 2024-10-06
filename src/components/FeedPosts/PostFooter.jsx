@@ -14,38 +14,76 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
 	const commentRef = useRef(null);
 	const { handleLikePost, isLiked, likes } = useLikePost(post);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	
+	// Quantity state
+	const [quantity, setQuantity] = useState(1);
 
 	const handleSubmitComment = async () => {
 		await handlePostComment(post.id, comment);
 		setComment("");
 	};
 
+	// Functions to increase/decrease quantity
+	const increaseQuantity = () => {
+		setQuantity((prev) => prev + 1);
+	};
+
+	const decreaseQuantity = () => {
+		if (quantity > 1) {
+			setQuantity((prev) => prev - 1);
+		}
+	};
+
 	return (
 		<Box mb={10} marginTop={"auto"}>
 			<Flex alignItems={"center"} justifyContent="space-between" w={"full"} pt={0} mb={2} mt={4}>
 				{/* Like and Comment Icons on the left */}
-				<Flex alignItems={"center"} gap={3}>
+				<Flex alignItems={"center"} gap={2.5}>
 					<Box onClick={handleLikePost} cursor={"pointer"} fontSize={18}>
 						{!isLiked ? <NotificationsLogo /> : <UnlikeLogo />}
 					</Box>
 					<Text fontWeight={600} fontSize={"sm"}>
 						{likes} likes
 					</Text>
+					{/* Pipeline Symbol with Price */}
+					<Text fontWeight={600} fontSize={"sm"}>| ₹{post.price}</Text> 
 				</Flex>
 
-				{/* Buy Now Button on the right */}
-				<Button
-					id="buynow"
-					bg="blue.500"
-					color="white"
-					borderRadius="2xl"
-					size="sm"
-					_hover={{ bg: "blue.800" }}
-				>
-					Buy Now
-				</Button>
-			</Flex>
+				{/* Quantity Button */}
+				<Flex alignItems="center" gap={2}>
+					<Button
+						onClick={decreaseQuantity}
+						bg="transparent"
+						color="blue.500"
+						borderRadius="full"
+						_hover={{ bg: "blue.100" }} // Change to desired hover color
+					>
+						-
+					</Button>
+					<Text fontSize="sm" color="blue.500" fontWeight={600}>{quantity}</Text>
+					<Button
+						onClick={increaseQuantity}
+						bg="transparent"
+						color="blue.500"
+						borderRadius="full"
+						_hover={{ bg: "blue.100" }} // Change to desired hover color
+					>
+						+
+					</Button>
 
+					{/* Add to Cart Button */}
+					<Button
+						id="addToCart"
+						bg="blue.500"
+						color="white"
+						borderRadius="2xl"
+						size="sm"
+						_hover={{ bg: "blue.800" }}
+					>
+						Add to Cart
+					</Button>
+				</Flex>
+			</Flex>
 
 			{isProfilePage && (
 				<Text fontSize='12' color={"gray"}>

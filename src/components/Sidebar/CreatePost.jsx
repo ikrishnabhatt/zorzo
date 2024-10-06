@@ -17,7 +17,6 @@ import {
 	useDisclosure,
 } from "@chakra-ui/react";
 import { CreatePostLogo } from "../../assets/constants";
-import { BsFillImageFill } from "react-icons/bs";
 import { useRef, useState } from "react";
 import usePreviewImg from "../../hooks/usePreviewImg";
 import useShowToast from "../../hooks/useShowToast";
@@ -28,10 +27,12 @@ import { useLocation } from "react-router-dom";
 import { addDoc, arrayUnion, collection, doc, updateDoc } from "firebase/firestore";
 import { firestore, storage } from "../../firebase/firebase";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { BsFillImageFill } from "react-icons/bs"; // Adjust or remove this line if you're changing the icon
 
 const CreatePost = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [caption, setCaption] = useState("");
+	const [price, setPrice] = useState(""); // New state for price
 	const imageRef = useRef(null);
 	const { handleImageChange, selectedFile, setSelectedFile } = usePreviewImg();
 	const showToast = useShowToast();
@@ -39,9 +40,10 @@ const CreatePost = () => {
 
 	const handlePostCreation = async () => {
 		try {
-			await handleCreatePost(selectedFile, caption);
+			await handleCreatePost(selectedFile, caption, price); // Pass price to handleCreatePost
 			onClose();
 			setCaption("");
+			setPrice(""); // Reset price
 			setSelectedFile(null);
 		} catch (error) {
 			showToast("Error", error.message, "error");
@@ -86,13 +88,25 @@ const CreatePost = () => {
 							onChange={(e) => setCaption(e.target.value)}
 						/>
 
+						{/* New input for price */}
+						<Input
+							placeholder='Product Price...'
+							value={price}
+							onChange={(e) => setPrice(e.target.value)}
+							mt={4} // Add margin top for spacing
+						/>
+
 						<Input type='file' hidden ref={imageRef} onChange={handleImageChange} />
 
-						<BsFillImageFill
+						<Button
 							onClick={() => imageRef.current.click()}
-							style={{ marginTop: "15px", marginLeft: "5px", cursor: "pointer" }}
-							size={16}
-						/>
+							mt={4} // Add margin top for spacing
+							colorScheme="blue" // Button color
+							leftIcon={<BsFillImageFill />} // Use an icon here
+						>
+							Add Image
+						</Button>
+
 						{selectedFile && (
 							<Flex mt={5} w={"full"} position={"relative"} justifyContent={"center"}>
 								<Image src={selectedFile} alt='Selected img' />
@@ -130,12 +144,13 @@ function useCreatePost() {
 	const userProfile = useUserProfileStore((state) => state.userProfile);
 	const { pathname } = useLocation();
 
-	const handleCreatePost = async (selectedFile, caption) => {
+	const handleCreatePost = async (selectedFile, caption, price) => { // Accept price parameter
 		if (isLoading) return;
 		if (!selectedFile) throw new Error("Please select an image");
 		setIsLoading(true);
 		const newPost = {
 			caption: caption,
+			price: price, // Add price to the new post object
 			likes: [],
 			comments: [],
 			createdAt: Date.now(),
@@ -168,64 +183,4 @@ function useCreatePost() {
 	};
 
 	return { isLoading, handleCreatePost };
-}
-
-// 1- COPY AND PASTE AS THE STARTER CODE FOR THE CRAETEPOST COMPONENT
-// import { Box, Flex, Tooltip } from "@chakra-ui/react";
-// import { CreatePostLogo } from "../../assets/constants";
-
-// const CreatePost = () => {
-// 	return (
-// 		<>
-// 			<Tooltip
-// 				hasArrow
-// 				label={"Create"}
-// 				placement='right'
-// 				ml={1}
-// 				openDelay={500}
-// 				display={{ base: "block", md: "none" }}
-// 			>
-// 				<Flex
-// 					alignItems={"center"}
-// 					gap={4}
-// 					_hover={{ bg: "whiteAlpha.400" }}
-// 					borderRadius={6}
-// 					p={2}
-// 					w={{ base: 10, md: "full" }}
-// 					justifyContent={{ base: "center", md: "flex-start" }}
-// 				>
-// 					<CreatePostLogo />
-// 					<Box display={{ base: "none", md: "block" }}>Create</Box>
-// 				</Flex>
-// 			</Tooltip>
-// 		</>
-// 	);
-// };
-
-// export default CreatePost;
-
-// 2-COPY AND PASTE FOR THE MODAL
-{
-	/* <Modal isOpen={isOpen} onClose={onClose} size='xl'>
-				<ModalOverlay />
-
-				<ModalContent bg={"black"} border={"1px solid gray"}>
-					<ModalHeader>Create Post</ModalHeader>
-					<ModalCloseButton />
-					<ModalBody pb={6}>
-						<Textarea placeholder='Post caption...' />
-
-						<Input type='file' hidden />
-
-						<BsFillImageFill
-							style={{ marginTop: "15px", marginLeft: "5px", cursor: "pointer" }}
-							size={16}
-						/>
-					</ModalBody>
-
-					<ModalFooter>
-						<Button mr={3}>Post</Button>
-					</ModalFooter>
-				</ModalContent>
-			</Modal> */
 }
