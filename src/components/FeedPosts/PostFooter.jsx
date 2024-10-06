@@ -6,6 +6,7 @@ import useAuthStore from "../../store/authStore";
 import useLikePost from "../../hooks/useLikePost";
 import { timeAgo } from "../../utils/timeAgo";
 import CommentsModal from "../Modals/CommentsModal";
+import useCart from "../../hooks/useCart";
 
 const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
 	const { isCommenting, handlePostComment } = usePostComment();
@@ -144,5 +145,15 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
 		</Box>
 	);
 };
+
+const ProductPage = ({ product }) => {
+	const { addToCart } = useCart();
+  
+	const handleAddToCart = () => {
+	  addToCart({ id: product.id, title: product.title, price: product.price, quantity: 1 });
+	};
+  
+	return <button onClick={handleAddToCart}>Add to Cart</button>;
+  };
 
 export default PostFooter;
