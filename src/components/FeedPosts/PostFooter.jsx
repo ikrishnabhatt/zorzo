@@ -6,7 +6,8 @@ import useAuthStore from "../../store/authStore";
 import useLikePost from "../../hooks/useLikePost";
 import { timeAgo } from "../../utils/timeAgo";
 import CommentsModal from "../Modals/CommentsModal";
-import useCart from "../../hooks/useCart";
+import { useToast } from "@chakra-ui/react";
+import axios from 'axios';
 
 const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
 	const { isCommenting, handlePostComment } = usePostComment();
@@ -24,6 +25,37 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
 		setComment("");
 	};
 
+	const toast = useToast();
+
+    const handleAddToCart = async () => {
+        try {
+            const response = await axios.post('/api/cart/add', {
+                productId: post.id,
+                name: post.caption,
+                price: post.price,
+                quantity: quantity
+            });
+
+            if (response.data.success) {
+                toast({
+                    title: "Added to cart",
+                    description: `${quantity} x ${post.caption} added to your cart`,
+                    status: "success",
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
+        } catch (error) {
+            console.error("Error adding to cart:", error);
+            toast({
+                title: "Error",
+                description: "Failed to add item to cart",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    };
 	// Functions to increase/decrease quantity
 	const increaseQuantity = () => {
 		setQuantity((prev) => prev + 1);
@@ -34,6 +66,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
 			setQuantity((prev) => prev - 1);
 		}
 	};
+
 
 	return (
 		<Box mb={10} marginTop={"auto"}>
@@ -80,6 +113,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
 						borderRadius="2xl"
 						size="sm"
 						_hover={{ bg: "blue.800" }}
+						onClick={handleAddToCart}
 					>
 						Add to Cart
 					</Button>
@@ -145,15 +179,5 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
 		</Box>
 	);
 };
-
-const ProductPage = ({ product }) => {
-	const { addToCart } = useCart();
-  
-	const handleAddToCart = () => {
-	  addToCart({ id: product.id, title: product.title, price: product.price, quantity: 1 });
-	};
-  
-	return <button onClick={handleAddToCart}>Add to Cart</button>;
-  };
 
 export default PostFooter;
