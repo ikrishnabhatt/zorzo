@@ -114,7 +114,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
 						borderRadius="2xl"
 						size="sm"
 						_hover={{ bg: "blue.800" }}
-						onClick={Cart}
+						onClick={handleAddToCart}
 					>
 						Add to Cart
 					</Button>
