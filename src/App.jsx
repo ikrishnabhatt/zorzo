@@ -3,9 +3,10 @@ import HomePage from "./pages/HomePage/HomePage";
 import AuthPage from "./pages/AuthPage/AuthPage";
 import PageLayout from "./Layouts/PageLayout/PageLayout";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import CartPage from "./pages/Cartpage/CartPage";
+
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase/firebase";
-
 function App() {
 	const [authUser] = useAuthState(auth);
 
@@ -15,6 +16,7 @@ function App() {
 				<Route path='/' element={authUser ? <HomePage /> : <Navigate to='/auth' />} />
 				<Route path='/auth' element={!authUser ? <AuthPage /> : <Navigate to='/' />} />
 				<Route path='/:username' element={<ProfilePage />} />
+				<Route path="/cart" element={<CartPage />} />
 			</Routes>
 		</PageLayout>
 	);

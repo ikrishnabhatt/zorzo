@@ -8,6 +8,7 @@ import { timeAgo } from "../../utils/timeAgo";
 import CommentsModal from "../Modals/CommentsModal";
 import { useToast } from "@chakra-ui/react";
 import axios from 'axios';
+import Cart from "../Sidebar/Cart";
 
 const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
 	const { isCommenting, handlePostComment } = usePostComment();
@@ -113,7 +114,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
 						borderRadius="2xl"
 						size="sm"
 						_hover={{ bg: "blue.800" }}
-						onClick={handleAddToCart}
+						onClick={Cart}
 					>
 						Add to Cart
 					</Button>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Flex, Heading, Button, Divider } from '@chakra-ui/react';
-import useCart from '../hooks/useCart'; // Your cart hook
 
 const CheckoutPage = () => {
   const { cart, updateQuantity, removeFromCart } = useCart();
