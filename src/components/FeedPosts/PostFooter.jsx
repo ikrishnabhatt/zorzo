@@ -7,25 +7,27 @@ import useLikePost from "../../hooks/useLikePost";
 import { timeAgo } from "../../utils/timeAgo";
 import CommentsModal from "../Modals/CommentsModal";
 import { useToast } from "@chakra-ui/react";
-
+import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
+import axios from 'axios'; // Import axios for API requests
 
 const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
-	const { isCommenting, handlePostComment } = usePostComment();
-	const [comment, setComment] = useState("");
-	const authUser = useAuthStore((state) => state.user);
-	const commentRef = useRef(null);
-	const { handleLikePost, isLiked, likes } = useLikePost(post);
-	const { isOpen, onOpen, onClose } = useDisclosure();
-	
-	// Quantity state
-	const [quantity, setQuantity] = useState(1);
+    const { isCommenting, handlePostComment } = usePostComment();
+    const [comment, setComment] = useState("");
+    const authUser = useAuthStore((state) => state.user);
+    const commentRef = useRef(null);
+    const { handleLikePost, isLiked, likes } = useLikePost(post);
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const navigate = useNavigate(); // Use navigate for redirection
 
-	const handleSubmitComment = async () => {
-		await handlePostComment(post.id, comment);
-		setComment("");
-	};
+    // Quantity state
+    const [quantity, setQuantity] = useState(1);
 
-	const toast = useToast();
+    const handleSubmitComment = async () => {
+        await handlePostComment(post.id, comment);
+        setComment("");
+    };
+
+    const toast = useToast();
 
     const handleAddToCart = async () => {
         try {
@@ -56,128 +58,153 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
             });
         }
     };
-	// Functions to increase/decrease quantity
-	const increaseQuantity = () => {
-		setQuantity((prev) => prev + 1);
-	};
 
-	const decreaseQuantity = () => {
-		if (quantity > 1) {
-			setQuantity((prev) => prev - 1);
-		}
-	};
+    // Function for "Buy Now" redirection
+    const handleBuyNow = () => {
+        // Pass the necessary product information to the checkout page
+        navigate("/checkout", {
+            state: { 
+                price: post.price, 
+                itemName: post.caption,
+                quantity: quantity 
+            }
+        });
+    };
 
+    // Functions to increase/decrease quantity
+    const increaseQuantity = () => {
+        setQuantity((prev) => prev + 1);
+    };
 
-	return (
-		<Box mb={10} marginTop={"auto"}>
-			<Flex alignItems={"center"} justifyContent="space-between" w={"full"} pt={0} mb={2} mt={4}>
-				{/* Like and Comment Icons on the left */}
-				<Flex alignItems={"center"} gap={2.5}>
-					<Box onClick={handleLikePost} cursor={"pointer"} fontSize={18}>
-						{!isLiked ? <NotificationsLogo /> : <UnlikeLogo />}
-					</Box>
-					<Text fontWeight={600} fontSize={"sm"}>
-						{likes} likes
-					</Text>
-					{/* Pipeline Symbol with Price */}
-					<Text fontWeight={600} fontSize={"sm"}>| ₹{post.price}</Text> 
-				</Flex>
+    const decreaseQuantity = () => {
+        if (quantity > 1) {
+            setQuantity((prev) => prev - 1);
+        }
+    };
 
-				{/* Quantity Button */}
-				<Flex alignItems="center" gap={2}>
-					<Button
-						onClick={decreaseQuantity}
-						bg="transparent"
-						color="blue.500"
-						borderRadius="full"
-						_hover={{ bg: "blue.100" }} // Change to desired hover color
-					>
-						-
-					</Button>
-					<Text fontSize="sm" color="blue.500" fontWeight={600}>{quantity}</Text>
-					<Button
-						onClick={increaseQuantity}
-						bg="transparent"
-						color="blue.500"
-						borderRadius="full"
-						_hover={{ bg: "blue.100" }} // Change to desired hover color
-					>
-						+
-					</Button>
+    return (
+        <Box mb={10} marginTop={"auto"}>
+            <Flex alignItems={"center"} justifyContent="space-between" w={"full"} pt={0} mb={2} mt={4}>
+                {/* Like and Comment Icons on the left */}
+                <Flex alignItems={"center"} gap={2.5}>
+                    <Box onClick={handleLikePost} cursor={"pointer"} fontSize={18}>
+                        {!isLiked ? <NotificationsLogo /> : <UnlikeLogo />}
+                    </Box>
+                    <Text fontWeight={600} fontSize={"sm"}>
+                        {likes} likes
+                    </Text>
+                    {/* Pipeline Symbol with Price */}
+                    <Text fontWeight={600} fontSize={"sm"}>| ₹{post.price}</Text>
+                </Flex>
 
-					{/* Add to Cart Button */}
-					<Button
-						id="addToCart"
-						bg="blue.500"
-						color="white"
-						borderRadius="2xl"
-						size="sm"
-						_hover={{ bg: "blue.800" }}
-						onClick={handleAddToCart}
-					>
-						Add to Cart
-					</Button>
-				</Flex>
-			</Flex>
+                {/* Quantity and Buttons */}
+                <Flex alignItems="center" gap={2}>
+                    <Button
+                        onClick={decreaseQuantity}
+                        bg="transparent"
+                        color="blue.500"
+                        borderRadius="full"
+                        _hover={{ bg: "blue.100" }} // Change to desired hover color
+                    >
+                        -
+                    </Button>
+                    <Text fontSize="sm" color="blue.500" fontWeight={600}>{quantity}</Text>
+                    <Button
+                        onClick={increaseQuantity}
+                        bg="transparent"
+                        color="blue.500"
+                        borderRadius="full"
+                        _hover={{ bg: "blue.100" }} // Change to desired hover color
+                    >
+                        +
+                    </Button>
 
-			{isProfilePage && (
-				<Text fontSize='12' color={"gray"}>
-					Posted {timeAgo(post.createdAt)}
-				</Text>
-			)}
+                    {/* Add to Cart Button */}
+                    <Button
+                        id="addToCart"
+                        bg="blue.500"
+                        color="white"
+                        borderRadius="2xl"
+                        size="sm"
+                        _hover={{ bg: "blue.800" }}
+                        onClick={handleAddToCart}
+                    >
+                        Add to Cart
+                    </Button>
 
-			{!isProfilePage && (
-				<>
-					<Text fontSize='sm' fontWeight={700}>
-						{creatorProfile?.username}{" "}
-						<Text as='span' fontWeight={400}>
-							{post.caption}
-						</Text>
-					</Text>
-					{post.comments.length > 0 && (
-						<Text fontSize='sm' color={"gray"} cursor={"pointer"} onClick={onOpen}>
-							View all {post.comments.length} comments
-						</Text>
-					)}
-					{/* COMMENTS MODAL ONLY IN THE HOME PAGE */}
-					{isOpen ? <CommentsModal isOpen={isOpen} onClose={onClose} post={post} /> : null}
-				</>
-			)}
+                    {/* Buy Now Button */}
+                    <Button
+                        id="buyNow"
+                        bg="blue.500"
+                        color="white"
+                        borderRadius="2xl"
+                        size="sm"
+                        _hover={{ bg: "blue.800" }}
+                        onClick={handleBuyNow} // Redirect to checkout page
+                    >
+                        Buy Now
+                    </Button>
+                </Flex>
+            </Flex>
 
-			{/* Comment Post Section */}
-			{authUser && (
-				<Flex alignItems={"center"} gap={3} justifyContent={"space-between"} w={"full"} mt={2}>					
-					<Box cursor={"pointer"} fontSize={18} onClick={() => commentRef.current.focus()}>
-						<CommentLogo />
-					</Box>
-					<InputGroup>
-						<Input
-							variant={"flushed"}
-							placeholder={"Add a comment..."}
-							fontSize={14}
-							onChange={(e) => setComment(e.target.value)}
-							value={comment}
-							ref={commentRef}
-						/>
-						<InputRightElement>
-							<Button
-								fontSize={14}
-								color={"blue.500"}
-								fontWeight={600}
-								cursor={"pointer"}
-								_hover={{ color: "white" }}
-								bg={"transparent"}
-								onClick={handleSubmitComment}
-								isLoading={isCommenting}
-							>
-								Post
-							</Button>
-						</InputRightElement>
-					</InputGroup>
-				</Flex>
-			)}
-		</Box>
-	);
+            {isProfilePage && (
+                <Text fontSize='12' color={"gray"}>
+                    Posted {timeAgo(post.createdAt)}
+                </Text>
+            )}
+
+            {!isProfilePage && (
+                <>
+                    <Text fontSize='sm' fontWeight={700}>
+                        {creatorProfile?.username}{" "}
+                        <Text as='span' fontWeight={400}>
+                            {post.caption}
+                        </Text>
+                    </Text>
+                    {post.comments.length > 0 && (
+                        <Text fontSize='sm' color={"gray"} cursor={"pointer"} onClick={onOpen}>
+                            View all {post.comments.length} comments
+                        </Text>
+                    )}
+                    {/* COMMENTS MODAL ONLY IN THE HOME PAGE */}
+                    {isOpen ? <CommentsModal isOpen={isOpen} onClose={onClose} post={post} /> : null}
+                </>
+            )}
+
+            {/* Comment Post Section */}
+            {authUser && (
+                <Flex alignItems={"center"} gap={3} justifyContent={"space-between"} w={"full"} mt={2}>
+                    <Box cursor={"pointer"} fontSize={18} onClick={() => commentRef.current.focus()}>
+                        <CommentLogo />
+                    </Box>
+                    <InputGroup>
+                        <Input
+                            variant={"flushed"}
+                            placeholder={"Add a comment..."}
+                            fontSize={14}
+                            onChange={(e) => setComment(e.target.value)}
+                            value={comment}
+                            ref={commentRef}
+                        />
+                        <InputRightElement>
+                            <Button
+                                fontSize={14}
+                                color={"blue.500"}
+                                fontWeight={600}
+                                cursor={"pointer"}
+                                _hover={{ color: "white" }}
+                                bg={"transparent"}
+                                onClick={handleSubmitComment}
+                                isLoading={isCommenting}
+                            >
+                                Post
+                            </Button>
+                        </InputRightElement>
+                    </InputGroup>
+                </Flex>
+            )}
+        </Box>
+    );
 };
 
 export default PostFooter;
