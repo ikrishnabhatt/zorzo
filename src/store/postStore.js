@@ -20,7 +20,6 @@ const usePostStore = create((set) => ({
 				return post;
 			}),
 		})),
-	// Update quantity of a specific post
 	updateQuantity: (postId, quantity) =>
 		set((state) => ({
 			posts: state.posts.map((post) => {
@@ -30,7 +29,6 @@ const usePostStore = create((set) => ({
 				return post;
 			}),
 		})),
-	// Update price of a specific post
 	updatePrice: (postId, price) =>
 		set((state) => ({
 			posts: state.posts.map((post) => {

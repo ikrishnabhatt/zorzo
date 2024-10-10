@@ -8,10 +8,7 @@ const Checkout = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // Extract the price and item details passed via state
     const { price, itemName } = location.state || {};
-
-    // State for quantity, payment method, and payment details
     const [quantity, setQuantity] = useState(1);
     const [paymentMethod, setPaymentMethod] = useState("UPI");
     const [upiId, setUpiId] = useState("");
@@ -19,11 +16,9 @@ const Checkout = () => {
     const [expiryDate, setExpiryDate] = useState("");
     const [cvv, setCvv] = useState("");
 
-    // Calculate total price
     const totalPrice = price * quantity;
 
     const handlePayment = () => {
-        // Validate the input fields based on the payment method
         if (paymentMethod === "UPI" && !upiId) {
             alert("Please enter your UPI ID.");
             return;
@@ -32,18 +27,15 @@ const Checkout = () => {
             return;
         }
 
-        // Here you can integrate the payment logic using a payment gateway
         alert(`Proceeding to payment via ${paymentMethod} for ₹${totalPrice}!`);
 
-        // Mocking a payment process
         setTimeout(() => {
             alert(`Payment successful via ${paymentMethod} for ₹${totalPrice}!`);
-            navigate("/"); // Redirect to home after payment
-        }, 2000); // Simulate a delay for the payment process
+            navigate("/");
+        }, 2000);
     };
 
     if (!price) {
-        // Redirect if no price is passed (for safety)
         return <Text color="gray.500">Invalid request. No price data.</Text>;
     }
 
@@ -130,7 +122,6 @@ const Checkout = () => {
                     </Stack>
                 </RadioGroup>
 
-                {/* Dynamic Input Fields Based on Payment Method */}
                 {paymentMethod === "UPI" && (
                     <FormControl mb={6}>
                         <FormLabel>UPI ID:</FormLabel>
@@ -180,7 +171,6 @@ const Checkout = () => {
                     </>
                 )}
 
-                {/* Proceed Further Button */}
                 <Button
                     size="lg"
                     color="blue.400"

@@ -7,8 +7,8 @@ import useLikePost from "../../hooks/useLikePost";
 import { timeAgo } from "../../utils/timeAgo";
 import CommentsModal from "../Modals/CommentsModal";
 import { useToast } from "@chakra-ui/react";
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
-import axios from 'axios'; // Import axios for API requests
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; 
 
 const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
     const { isCommenting, handlePostComment } = usePostComment();
@@ -17,9 +17,8 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
     const commentRef = useRef(null);
     const { handleLikePost, isLiked, likes } = useLikePost(post);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const navigate = useNavigate(); // Use navigate for redirection
+    const navigate = useNavigate(); 
 
-    // Quantity state
     const [quantity, setQuantity] = useState(1);
 
     const handleSubmitComment = async () => {
@@ -59,9 +58,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
         }
     };
 
-    // Function for "Buy Now" redirection
     const handleBuyNow = () => {
-        // Pass the necessary product information to the checkout page
         navigate("/checkout", {
             state: { 
                 price: post.price, 
@@ -71,7 +68,6 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
         });
     };
 
-    // Functions to increase/decrease quantity
     const increaseQuantity = () => {
         setQuantity((prev) => prev + 1);
     };
@@ -114,7 +110,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
                         bg="transparent"
                         color="blue.500"
                         borderRadius="full"
-                        _hover={{ bg: "blue.100" }} // Change to desired hover color
+                        _hover={{ bg: "blue.100" }} 
                     >
                         +
                     </Button>
@@ -166,7 +162,6 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
                             View all {post.comments.length} comments
                         </Text>
                     )}
-                    {/* COMMENTS MODAL ONLY IN THE HOME PAGE */}
                     {isOpen ? <CommentsModal isOpen={isOpen} onClose={onClose} post={post} /> : null}
                 </>
             )}

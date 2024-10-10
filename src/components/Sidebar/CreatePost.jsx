@@ -27,12 +27,12 @@ import { useLocation } from "react-router-dom";
 import { addDoc, arrayUnion, collection, doc, updateDoc } from "firebase/firestore";
 import { firestore, storage } from "../../firebase/firebase";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
-import { BsFillImageFill } from "react-icons/bs"; // Adjust or remove this line if you're changing the icon
+import { BsFillImageFill } from "react-icons/bs"; 
 
 const CreatePost = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [caption, setCaption] = useState("");
-	const [price, setPrice] = useState(""); // New state for price
+	const [price, setPrice] = useState(""); 
 	const imageRef = useRef(null);
 	const { handleImageChange, selectedFile, setSelectedFile } = usePreviewImg();
 	const showToast = useShowToast();
@@ -40,10 +40,10 @@ const CreatePost = () => {
 
 	const handlePostCreation = async () => {
 		try {
-			await handleCreatePost(selectedFile, caption, price); // Pass price to handleCreatePost
+			await handleCreatePost(selectedFile, caption, price);
 			onClose();
 			setCaption("");
-			setPrice(""); // Reset price
+			setPrice("");
 			setSelectedFile(null);
 		} catch (error) {
 			showToast("Error", error.message, "error");
@@ -93,16 +93,16 @@ const CreatePost = () => {
 							placeholder='Product Price...'
 							value={price}
 							onChange={(e) => setPrice(e.target.value)}
-							mt={4} // Add margin top for spacing
+							mt={4}
 						/>
 
 						<Input type='file' hidden ref={imageRef} onChange={handleImageChange} />
 
 						<Button
 							onClick={() => imageRef.current.click()}
-							mt={4} // Add margin top for spacing
-							colorScheme="blue" // Button color
-							leftIcon={<BsFillImageFill />} // Use an icon here
+							mt={4} 
+							colorScheme="blue"
+							leftIcon={<BsFillImageFill />}
 						>
 							Add Image
 						</Button>
@@ -144,13 +144,13 @@ function useCreatePost() {
 	const userProfile = useUserProfileStore((state) => state.userProfile);
 	const { pathname } = useLocation();
 
-	const handleCreatePost = async (selectedFile, caption, price) => { // Accept price parameter
+	const handleCreatePost = async (selectedFile, caption, price) => { 
 		if (isLoading) return;
 		if (!selectedFile) throw new Error("Please select an image");
 		setIsLoading(true);
 		const newPost = {
 			caption: caption,
-			price: price, // Add price to the new post object
+			price: price, 
 			likes: [],
 			comments: [],
 			createdAt: Date.now(),

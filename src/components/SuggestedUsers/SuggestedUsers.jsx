@@ -6,7 +6,6 @@ import useGetSuggestedUsers from "../../hooks/useGetSuggestedUsers";
 const SuggestedUsers = () => {
 	const { isLoading, suggestedUsers } = useGetSuggestedUsers();
 
-	// optional: render loading skeleton
 	if (isLoading) return null;
 
 	return (
@@ -24,7 +23,6 @@ const SuggestedUsers = () => {
 				</Flex>
 			)}
 
-			{/* <SuggestedUser name='krishna bhatt' followers={1200} avatar='https://bit.ly/dan-abramov' /> */}
 			
 			{suggestedUsers.map((user) => (
 				<SuggestedUser user={user} key={user.id} />

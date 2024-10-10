@@ -1,11 +1,11 @@
 import { Box, Link, Tooltip } from "@chakra-ui/react";
-import { AiOutlineShoppingCart } from "react-icons/ai"; // Import cart icon
-import { Link as RouterLink } from "react-router-dom"; // For routing
+import { AiOutlineShoppingCart } from "react-icons/ai"; 
+import { Link as RouterLink } from "react-router-dom";
 const Cart = () => {
 	return (
 		<Tooltip
 			hasArrow
-			label={"Cart"} // Change tooltip label to "Cart"
+			label={"Cart"}
 			placement='right'
 			ml={1}
 			openDelay={500}
@@ -13,7 +13,7 @@ const Cart = () => {
 		>
 			<Link
 				display={"flex"}
-				to={"./cart"} // Change route to cart page
+				to={"./cart"}
 				as={RouterLink}
 				alignItems={"center"}
 				gap={4}
@@ -23,8 +23,8 @@ const Cart = () => {
 				w={{ base: 10, md: "full" }}
 				justifyContent={{ base: "center", md: "flex-start" }}
 			>
-				<AiOutlineShoppingCart size={25} /> {/* Change icon to cart */}
-				<Box display={{ base: "none", md: "block" }}>Cart</Box> {/* Change label to "Cart" */}
+				<AiOutlineShoppingCart size={25} />
+				<Box display={{ base: "none", md: "block" }}>Cart</Box>
 			</Link>
 		</Tooltip>
 	);

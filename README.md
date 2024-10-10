@@ -1,6 +1,6 @@
-# Zorzo - Instagram Clone
+# Zorzo - The Commercial Media
 
-Zorzo is a full-featured Instagram clone built using React, Firebase, Chakra UI, and Express.js. It allows users to post images, follow other users, and engage with content in a similar way to Instagram.
+Zorzo is a full-featured commercial media built using React, Firebase, Chakra UI, and Express.js. It allows users to post images, follow other users, and engage with content in a similar way to Instagram.
 
 ## Features
 
