@@ -81,7 +81,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
     return (
         <Box mb={10} marginTop={"auto"}>
             <Flex alignItems={"center"} justifyContent="space-between" w={"full"} pt={0} mb={2} mt={4}>
-                {/* Like and Comment Icons on the left */}
+              
                 <Flex alignItems={"center"} gap={2.5}>
                     <Box onClick={handleLikePost} cursor={"pointer"} fontSize={18}>
                         {!isLiked ? <NotificationsLogo /> : <UnlikeLogo />}
@@ -89,7 +89,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
                     <Text fontWeight={600} fontSize={"sm"}>
                         {likes} likes
                     </Text>
-                    {/* Pipeline Symbol with Price */}
+                   
                     <Text fontWeight={600} fontSize={"sm"}>| ₹{post.price}</Text>
                 </Flex>
 
@@ -100,7 +100,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
                         bg="transparent"
                         color="blue.500"
                         borderRadius="full"
-                        _hover={{ bg: "blue.100" }} // Change to desired hover color
+                        _hover={{ bg: "blue.100" }} 
                     >
                         -
                     </Button>
@@ -115,7 +115,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
                         +
                     </Button>
 
-                    {/* Add to Cart Button */}
+                 
                     <Button
                         id="addToCart"
                         bg="blue.500"
@@ -136,7 +136,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
                         borderRadius="2xl"
                         size="sm"
                         _hover={{ bg: "blue.800" }}
-                        onClick={handleBuyNow} // Redirect to checkout page
+                        onClick={handleBuyNow} 
                     >
                         Buy Now
                     </Button>
@@ -166,7 +166,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
                 </>
             )}
 
-            {/* Comment Post Section */}
+          
             {authUser && (
                 <Flex alignItems={"center"} gap={3} justifyContent={"space-between"} w={"full"} mt={2}>
                     <Box cursor={"pointer"} fontSize={18} onClick={() => commentRef.current.focus()}>
