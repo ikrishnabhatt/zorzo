@@ -36,7 +36,6 @@ const ProfilePage = () => {
 
 export default ProfilePage;
 
-// skeleton for profile header
 const ProfileHeaderSkeleton = () => {
 	return (
 		<Flex
